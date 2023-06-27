@@ -7,6 +7,7 @@ import six
 import os
 import ssl
 import datetime
+import irods.login
 import irods.password_obfuscation as obf
 from irods import MAX_NAME_LEN
 from ast import literal_eval as safe_eval
@@ -64,16 +65,33 @@ class Connection(object):
         self._disconnected = False
 
         scheme = self.account.authentication_scheme
+        auth_type = ''
 
-        if scheme == NATIVE_AUTH_SCHEME:
-            self._login_native()
-        elif scheme == GSI_AUTH_SCHEME:
-            self.client_ctx = None
-            self._login_gsi()
-        elif scheme == PAM_AUTH_SCHEME:
-            self._login_pam()
+        if self.server_version >= (4,3,0):
+            # use client side "plugin" module: irods.login.<scheme>
+            irods.login.load_plugins(subset=[scheme])
+            auth_module = getattr(irods.login, scheme, None)
+            if auth_module:
+                auth_module.login(self)
+                auth_type = auth_module.__name__
         else:
-            raise ValueError("Unknown authentication scheme %s" % scheme)
+            # use legacy (iRODS pre-4.3 style) authentication
+            auth_type = scheme
+            try:
+                if scheme == NATIVE_AUTH_SCHEME:
+                    self._login_native()
+                elif scheme == GSI_AUTH_SCHEME:
+                    self.client_ctx = None
+                    self._login_gsi()
+                elif scheme == PAM_AUTH_SCHEME:
+                    self._login_pam()
+            except:
+                auth_type = None
+
+        if not auth_type:
+            msg = "Authentication failed: scheme = {scheme!r}, auth_type = {auth_type!r}".format(**locals())
+            raise ValueError(msg)
+
         self.create_time = datetime.datetime.now()
         self.last_used_time = self.create_time
 
