@@ -36,7 +36,7 @@ from irods import (
     AUTH_SCHEME_KEY, AUTH_USER_KEY, AUTH_PWD_KEY, AUTH_TTL_KEY,
     NATIVE_AUTH_SCHEME,
     GSI_AUTH_PLUGIN, GSI_AUTH_SCHEME, GSI_OID,
-    PAM_AUTH_SCHEME)
+    PAM_AUTH_SCHEMES)
 from irods.client_server_negotiation import (
     perform_negotiation,
     validate_policy,
@@ -83,7 +83,7 @@ class Connection(object):
                 elif scheme == GSI_AUTH_SCHEME:
                     self.client_ctx = None
                     self._login_gsi()
-                elif scheme == PAM_AUTH_SCHEME:
+                elif scheme in PAM_AUTH_SCHEMES:
                     self._login_pam()
             except:
                 auth_type = None
@@ -481,7 +481,7 @@ class Connection(object):
         else:
 
             message_body = PluginAuthMessage(
-                auth_scheme_ = PAM_AUTH_SCHEME,
+                auth_scheme_ = PAM_AUTH_SCHEMES[self.server_version >= (4,3,0)],
                 context_ = ctx)
 
         auth_req = iRODSMessage(

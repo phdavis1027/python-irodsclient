@@ -17,7 +17,7 @@ from irods.manager.resource_manager import ResourceManager
 from irods.manager.zone_manager import ZoneManager
 from irods.exception import NetworkException
 from irods.password_obfuscation import decode
-from irods import NATIVE_AUTH_SCHEME, PAM_AUTH_SCHEME
+from irods import NATIVE_AUTH_SCHEME, PAM_AUTH_SCHEMES
 import threading
 import weakref
 from . import DEFAULT_CONNECTION_TIMEOUT
@@ -202,7 +202,7 @@ class iRODSSession(object):
             # default
             auth_scheme = 'native'
 
-        if auth_scheme.lower() == PAM_AUTH_SCHEME:
+        if auth_scheme.lower() in PAM_AUTH_SCHEMES:
             if 'password' in creds:
                 return iRODSAccount(**creds)
             else:
