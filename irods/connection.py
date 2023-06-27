@@ -36,7 +36,7 @@ from irods import (
     AUTH_SCHEME_KEY, AUTH_USER_KEY, AUTH_PWD_KEY, AUTH_TTL_KEY,
     NATIVE_AUTH_SCHEME,
     GSI_AUTH_PLUGIN, GSI_AUTH_SCHEME, GSI_OID,
-    PAM_AUTH_SCHEMES)
+    PAM_AUTH_SCHEMES, PAM_AUTH_SCHEMES)
 from irods.client_server_negotiation import (
     perform_negotiation,
     validate_policy,
@@ -83,7 +83,7 @@ class Connection(object):
                 elif scheme == GSI_AUTH_SCHEME:
                     self.client_ctx = None
                     self._login_gsi()
-                elif scheme in PAM_AUTH_SCHEMES:
+                elif scheme == PAM_AUTH_SCHEME:
                     self._login_pam()
             except:
                 auth_type = None
