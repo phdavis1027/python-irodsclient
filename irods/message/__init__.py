@@ -1,6 +1,7 @@
 """Define objects related to communication with iRODS server API endpoints."""
 
 import sys
+import base64
 import struct
 import logging
 import socket
@@ -470,6 +471,18 @@ class JSON_Binary_Request(BinBytesBuf):
         string = json.dumps(msg_struct)
         self.buf = string
         self.buflen = len(string)
+
+class JSON_Base64_Binary_Request(BinBytesBuf):
+
+    """A message body whose payload is BinBytesBuf containing base64-encoded JSON."""
+
+    def __init__(self,msg_struct):
+        """Initialize with a Python data structure that will be converted to base64-encoded JSON."""
+        super(JSON_Base64_Binary_Request,self).__init__()
+        string = json.dumps(msg_struct)
+        encoded = base64.b64encode(string.encode('utf-8')).decode('utf-8')
+        self.buf = encoded 
+        self.buflen = len(encoded)
 
 class BytesBuf(Message):
 

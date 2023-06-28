@@ -1,5 +1,5 @@
 from __future__ import print_function
-__all__ = [ 'pam_password', 'native' ]
+__all__ = [ 'pam_password', 'native', 'native_4_3_0' ]
 
 AUTH_PLUGIN_PACKAGE = 'irods.login'
 
