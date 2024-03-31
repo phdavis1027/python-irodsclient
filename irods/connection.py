@@ -224,6 +224,7 @@ class Connection(object):
                                                  salt_size,
                                                  hash_rounds,
                                                  0)
+        print(packed_header)
         wrapped_socket.sendall(packed_header)
 
         # Send shared secret
@@ -232,6 +233,7 @@ class Connection(object):
                                                  0,
                                                  0,
                                                  0)
+        print(packed_header)
         wrapped_socket.sendall(packed_header + key)
 
         # Use SSL socket from now on
