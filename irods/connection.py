@@ -150,7 +150,7 @@ class Connection(object):
                 err_msg = None
             if nominal_code(msg.int_info) not in acceptable_codes:
                 raise get_exception_by_code(msg.int_info, err_msg)
-        print(msg)
+        print(msg.pack())
         return msg
 
     def recv_into(self, buffer, **options):
