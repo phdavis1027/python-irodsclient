@@ -112,6 +112,7 @@ class Connection(object):
         string = message.pack()
 
         logger.debug(string)
+        print(string)
         try:
             self.socket.sendall(string)
         except:
@@ -149,6 +150,7 @@ class Connection(object):
                 err_msg = None
             if nominal_code(msg.int_info) not in acceptable_codes:
                 raise get_exception_by_code(msg.int_info, err_msg)
+        print(msg)
         return msg
 
     def recv_into(self, buffer, **options):
