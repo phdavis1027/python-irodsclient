@@ -133,7 +133,7 @@ class Connection(object):
                 msg = iRODSMessage.recv(self.socket)
             else:
                 msg = iRODSMessage.recv_into(self.socket, into_buffer)
-            print("Msg: ", string(msg))
+            print("Msg: ", str(msg))
 
         except (socket.error, socket.timeout) as e:
             # If _recv_message_in_len() fails in recv() or recv_into(),
