@@ -111,7 +111,7 @@ class Connection(object):
     def send(self, message):
         string = message.pack()
 
-        print(string)
+        print("Sending", string)
         logger.debug(string)
         try:
             self.socket.sendall(string)
@@ -133,6 +133,7 @@ class Connection(object):
                 msg = iRODSMessage.recv(self.socket)
             else:
                 msg = iRODSMessage.recv_into(self.socket, into_buffer)
+            print("Received", msg)
 
         except (socket.error, socket.timeout) as e:
             # If _recv_message_in_len() fails in recv() or recv_into(),
