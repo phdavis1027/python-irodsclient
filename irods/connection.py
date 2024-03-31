@@ -133,6 +133,8 @@ class Connection(object):
                 msg = iRODSMessage.recv(self.socket)
             else:
                 msg = iRODSMessage.recv_into(self.socket, into_buffer)
+
+            print(msg)
         except (socket.error, socket.timeout) as e:
             # If _recv_message_in_len() fails in recv() or recv_into(),
             # it will throw a socket.error exception. The exception is
@@ -150,7 +152,6 @@ class Connection(object):
                 err_msg = None
             if nominal_code(msg.int_info) not in acceptable_codes:
                 raise get_exception_by_code(msg.int_info, err_msg)
-        print(msg.pack())
         return msg
 
     def recv_into(self, buffer, **options):
