@@ -133,7 +133,6 @@ class Connection(object):
                 msg = iRODSMessage.recv(self.socket)
             else:
                 msg = iRODSMessage.recv_into(self.socket, into_buffer)
-            print("Msg: ", msg.pack())
 
         except (socket.error, socket.timeout) as e:
             # If _recv_message_in_len() fails in recv() or recv_into(),
@@ -197,6 +196,7 @@ class Connection(object):
 
     def ssl_startup(self):
         # Get encryption settings from client environment
+        print("Starting SSL startup")
         host = self.account.host
         algo = self.account.encryption_algorithm
         key_size = self.account.encryption_key_size
